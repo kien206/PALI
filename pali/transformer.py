@@ -1783,5 +1783,5 @@ class UL2(nn.Module):
         if self.training and self.cross_attn_tokens_dropout > 0:
             enc, mask = dropout_seq(enc, mask, self.cross_attn_tokens_dropout)
 
-        out = self.decoder(tgt, context=enc, context_mask=mask)
-        return out
+        out, emb = self.decoder(tgt, context=enc, context_mask=mask, return_logits_and_embeddings=True)
+        return out, emb
