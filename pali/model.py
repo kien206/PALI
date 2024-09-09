@@ -1,7 +1,7 @@
 from pali.transformer import ViTransformerWrapper, Encoder, UL2
+import torch.nn as nn
 
-
-class VitModel:
+class VitModel(nn.Module):
     """
     Vision Transformer Model.
 
@@ -27,6 +27,7 @@ class VitModel:
     def __init__(
         self, image_size=256, patch_size=32, dim=512, depth=6, heads=8, *args, **kwargs
     ):
+        super().__init__()
         self.image_size = image_size
         self.patch_size = patch_size
         self.dim = dim
@@ -90,7 +91,7 @@ class VitModel:
         return self.vit(img, return_embeddings=True)
 
 
-class Pali:
+class Pali(nn.Module):
     """
     Pali class represents the PALI model.
 
@@ -128,6 +129,7 @@ class Pali:
         dec_depth=6,
         dec_heads=8,
     ):
+        super().__init__()
         self.tokenizer = None
         self.dim = dim
         self.vit_model = VitModel(
@@ -152,7 +154,7 @@ class Pali:
 
     def forward(self, img, prompt, output, mask):
         """Get the image embeddings"""
-        img_embeds = self.vit_model.forward(img)
+        img_embeds = self.vit_model(img)
 
         """Get the output text embeddings"""
         result = self.ul(prompt, output, mask=mask, src_prepend_embeds=img_embeds)
